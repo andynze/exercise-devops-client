@@ -3,9 +3,9 @@
   "name": "client",
   "version": "0.1.0",
   "scripts": {
-    "build": "react-scripts --openssl-legacy-provider build",
+    "build": "react-scripts build",
     "format": "prettier --write 'src/*{.js,css}' && prettier-package-json --write package.json",
-    "start": "react-scripts --openssl-legacy-provider start", 
+    "start": "react-scriptsstart", 
     "test": "CI=true run-s test:formatting test:lint test:react",
     "test:formatting": "prettier --check 'src/*.{js,css}'",
     "test:lint": "eslint src --ext js",
