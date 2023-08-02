@@ -3,9 +3,9 @@
   "name": "client",
   "version": "0.1.0",
   "scripts": {
-    "build": "react-scripts build",
+    "build": "react-scripts --openssl-legacy-provider build",
     "format": "prettier --write 'src/*{.js,css}' && prettier-package-json --write package.json",
-    "start": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "test": "CI=true run-s test:formatting test:lint test:react",
     "test:formatting": "prettier --check 'src/*.{js,css}'",
     "test:lint": "eslint src --ext js",
@@ -16,8 +16,8 @@
     "@testing-library/react": "11.2.7",
     "@testing-library/user-event": "13.1.9",
     "axios": "0.21.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-scripts": "4.0.3"
   },
   "devDependencies": {
