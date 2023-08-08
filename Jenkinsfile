@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build Frontend static website for S3') {
             steps {
                 // Set up Node.js environment
 
@@ -36,33 +36,7 @@ pipeline {
                 sh "sudo npm run build"
             }
         }
-
-        stage('Clone Backend Repository') {
-            steps {
-                // Clone the backend repository
-                git branch: 'master', url: 'https://github.com/andynze1/exercise-devops-server.git'
-            }
-        }
-
-        stage('Build Backend') {
-            steps {
-                // Install dependencies and build the backend
-                sh "cd /home/ubuntu/exercise-devops-server"
-                sh "npm install run-s"
-                sh "npm install"
-                sh "sudo npm install pm2 -g"
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                // Run tests for frontend and backend (modify commands if needed)
-                sh "cd /home/ubuntu/exercise-devops-client"
-                sh "npm test"
-                sh "cd /home/ubuntu/exercise-devops-server && npm test"
-            }
-        }
-        stage("artifact to s3") {
+        stage("Upload static front end to s3") {
             steps {
                 withCredentials([
                     [
@@ -85,8 +59,8 @@ pipeline {
         success {
             script {
                 currentBuild.result = 'SUCCESS'
-                sh "cd /home/ubuntu/exercise-devops-server"
-                sh "pm2 start index.js"
+                sh ' echo Static files successfuly uploaded to S3'
+
             }
         }
     }
