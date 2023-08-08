@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1'
+    }
+    
     tools {nodejs "node"}
   
     stages {
@@ -46,18 +50,35 @@ pipeline {
                 sh "cd /home/ubuntu/exercise-devops-server"
                 sh "npm install run-s"
                 sh "npm install"
-                sh "npm install pm2"
+                sh "sudo npm install pm2 -g"
             }
         }
-
+        
         stage('Test') {
             steps {
                 // Run tests for frontend and backend (modify commands if needed)
-                sh "cd /home/ubuntu/exercise-devops-client && npm test"
+                sh "cd /home/ubuntu/exercise-devops-client"
+                sh "npm test"
                 sh "cd /home/ubuntu/exercise-devops-server && npm test"
             }
         }
-
+        stage("artifact to s3") {
+            steps {
+                withCredentials([
+                    [
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'awscred',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]
+                ]) {
+                    sh 'echo $AWS_ACCESS_KEY_ID'
+                    sh 'echo $AWS_SECRET_ACCESS_KEY'
+                    sh 'aws s3 ls s3://www.nzecruze.com'
+                    sh 'aws s3 cp /var/lib/jenkins/workspace/Build-React-NodeJS/build/  s3://www.nzecruze.com --recursive'
+                }
+            }
+        }
     }
 
     post {
